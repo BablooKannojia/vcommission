@@ -1,0 +1,179 @@
+{
+  "partnerships": {
+    "activeBrands": 12,
+    "invitedBrands": 5
+  },
+  "marketplaceMetrics": [
+    {
+      "id": 1,
+      "date": "2023-01-01",
+      "clicks": 1200,
+      "dpv": 850,
+      "atc": 450,
+      "salesCommission": 12500,
+      "conversionRate": 3.75,
+      "earningsPerClick": 10.42
+    },
+    {
+      "id": 2,
+      "date": "2023-02-01",
+      "clicks": 1500,
+      "dpv": 1100,
+      "atc": 600,
+      "salesCommission": 18000,
+      "conversionRate": 4.0,
+      "earningsPerClick": 12.0
+    },
+    {
+      "id": 3,
+      "date": "2023-03-01",
+      "clicks": 1700,
+      "dpv": 1200,
+      "atc": 600,
+      "salesCommission": 17000,
+      "conversionRate": 5.0,
+      "earningsPerClick": 13.0
+    },
+    {
+      "id": 4,
+      "date": "2023-04-01",
+      "clicks": 2000,
+      "dpv": 1500,
+      "atc": 800,
+      "salesCommission": 22000,
+      "conversionRate": 5.5,
+      "earningsPerClick": 14.5
+    },
+    {
+      "id": 5,
+      "date": "2023-05-01",
+      "clicks": 1800,
+      "dpv": 1300,
+      "atc": 700,
+      "salesCommission": 19000,
+      "conversionRate": 5.2,
+      "earningsPerClick": 13.8
+    }
+  ],
+  "clicksData": [
+    {
+      "month": "Jan",
+      "clicks": 1200,
+      "dpv": 850,
+      "atc": 450,
+      "conversion": 3750,
+      "sales": 12500,
+      "commission": 2500
+    },
+    {
+      "month": "Feb",
+      "clicks": 1500,
+      "dpv": 1100,
+      "atc": 600,
+      "conversion": 4500,
+      "sales": 18000,
+      "commission": 3600
+    },
+    {
+      "month": "Mar",
+      "clicks": 1600,
+      "dpv": 1200,
+      "atc": 500,
+      "conversion": 4700,
+      "sales": 17000,
+      "commission": 3500
+    },
+    {
+      "month": "Apr",
+      "clicks": 1200,
+      "dpv": 1000,
+      "atc": 200,
+      "conversion": 4200,
+      "sales": 12000,
+      "commission": 3000
+    },
+    {
+      "month": "May",
+      "clicks": 1800,
+      "dpv": 1300,
+      "atc": 700,
+      "conversion": 5200,
+      "sales": 19000,
+      "commission": 3800
+    },
+    {
+      "month": "Jun",
+      "clicks": 2100,
+      "dpv": 1600,
+      "atc": 900,
+      "conversion": 6000,
+      "sales": 23000,
+      "commission": 4600
+    },
+    {
+      "month": "Jul",
+      "clicks": 2300,
+      "dpv": 1800,
+      "atc": 1000,
+      "conversion": 6500,
+      "sales": 25000,
+      "commission": 5000
+    },
+    {
+      "month": "Aug",
+      "clicks": 2500,
+      "dpv": 2000,
+      "atc": 1200,
+      "conversion": 7000,
+      "sales": 28000,
+      "commission": 5600
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "asin": "B01N1UX8RW",
+      "name": "Premium Headphones",
+      "category": "Electronics",
+      "price": 199.99,
+      "stock": 45,
+      "image": "/src/assets/images/headphone.jpg",
+      "rating": 4.5,
+      "review": 126,
+      "sales": 1200,
+      "storeName":"RENPHO",
+      "commission": 170,
+      "rate": 4.5
+    },
+    {
+      "id": 2,
+      "asin": "A01N1UX8RW",
+      "name": "Wireless Keyboard",
+      "category": "Electronics",
+      "price": 59.99,
+      "stock": 78,
+      "image": "/src/assets/images/laptop.jpg",
+      "rating": 4.2,
+      "review": 1231,
+      "sales": 850,
+      "storeName":"Glocusent",
+      "commission": 150,
+      "rate": 3.5
+    },
+    {
+      "id": 3,
+      "asin": "C01N1UX8RW",
+      "name": "Bluetooth Speaker",
+      "category": "Electronics",
+      "price": 89.99,
+      "stock": 32,
+      "image": "/src/assets/images/headphone.jpg",
+      "rating": 4.7,
+      "review": 1200,
+      "sales": 1500,
+      "storeName":"RENPHO",
+      "commission": 140,
+      "rate": 2.5
+    }
+  ]
+}
