@@ -58,6 +58,7 @@
   "clicksData": [
     {
       "month": "Jan",
+      "date": "2025-01-01",
       "clicks": 1200,
       "dpv": 850,
       "atc": 450,
@@ -67,6 +68,7 @@
     },
     {
       "month": "Feb",
+      "date": "2025-02-01",
       "clicks": 1500,
       "dpv": 1100,
       "atc": 600,
@@ -76,6 +78,7 @@
     },
     {
       "month": "Mar",
+      "date": "2025-03-01",
       "clicks": 1600,
       "dpv": 1200,
       "atc": 500,
@@ -85,6 +88,7 @@
     },
     {
       "month": "Apr",
+      "date": "2025-04-01",
       "clicks": 1200,
       "dpv": 1000,
       "atc": 200,
@@ -94,6 +98,7 @@
     },
     {
       "month": "May",
+      "date": "2025-05-01",
       "clicks": 1800,
       "dpv": 1300,
       "atc": 700,
@@ -103,6 +108,7 @@
     },
     {
       "month": "Jun",
+      "date": "2025-06-01",
       "clicks": 2100,
       "dpv": 1600,
       "atc": 900,
@@ -112,6 +118,7 @@
     },
     {
       "month": "Jul",
+      "date": "2025-07-01",
       "clicks": 2300,
       "dpv": 1800,
       "atc": 1000,
@@ -121,6 +128,7 @@
     },
     {
       "month": "Aug",
+      "date": "2025-08-01",
       "clicks": 2500,
       "dpv": 2000,
       "atc": 1200,
@@ -130,6 +138,7 @@
     },
     {
       "month": "Sep",
+      "date": "2025-09-01",
       "clicks": 2900,
       "dpv": 2500,
       "atc": 1800,
@@ -139,6 +148,7 @@
     },
     {
       "month": "Oct",
+      "date": "2025-10-01",
       "clicks": 2800,
       "dpv": 2200,
       "atc": 1900,
@@ -148,6 +158,7 @@
     },
     {
       "month": "Nov",
+      "date": "2025-11-01",
       "clicks": 2300,
       "dpv": 2300,
       "atc": 1100,
@@ -157,6 +168,7 @@
     },
     {
       "month": "Dec",
+      "date": "2025-12-01",
       "clicks": 2300,
       "dpv": 2400,
       "atc": 1200,
@@ -210,6 +222,21 @@
       "storeName":"RENPHO",
       "commission": 140,
       "rate": 2.5
+    },
+    {
+      "id": 4,
+      "asin": "B01N1UX8RW",
+      "name": "Headphones",
+      "category": "Electronics",
+      "price": 199.99,
+      "stock": 45,
+      "image": "/src/assets/images/laptop.jpg",
+      "rating": 4.5,
+      "review": 126,
+      "sales": 1200,
+      "storeName":"RENPHO",
+      "commission": 170,
+      "rate": 4.5
     }
   ]
 }

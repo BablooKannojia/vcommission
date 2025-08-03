@@ -35,10 +35,8 @@ const ClicksChart: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  // Common data configuration
   const months = clicksData.map((item) => item.month);
   
-  // Get data for the current active tab
   const getChartData = () => {
     const datasetConfig = {
       backgroundColor: '#88a831',
@@ -268,7 +266,6 @@ const ClicksChart: React.FC = () => {
     { id: 'commission', label: 'Commission' },
   ];
 
-  // Determine which chart type to use for each tab
   const shouldUseLineChart = ['dpv', 'atc', 'conversions', 'sales', 'commission'].includes(activeTab);
 
   return (

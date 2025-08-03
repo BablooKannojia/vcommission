@@ -28,10 +28,10 @@ const ProductList: React.FC = () => {
             <option>India</option>
             <option>USA</option>
           </select>
-          <button className="bg-lime-400 text-white px-4 py-2 rounded hover:bg-lime-500 text-sm flex items-center">
+          <button className="bg-lime-400 text-white lg:px-4 md:px-4 px-3 py-2 rounded hover:bg-lime-500 text-sm flex items-center">
            <FaFilter className="text-white mr-1"/> <span>Filter</span>
           </button>
-          <button className="bg-lime-400 flex items-center text-white px-4 py-2 rounded hover:bg-lime-500 text-sm">
+          <button className="bg-lime-400 flex items-center text-white lg:px-4 md:px-4 px-3 py-2 rounded hover:bg-lime-500 text-sm">
             <BsArrowDownUp className="text-white font-bold text-lg mr-1"/> <span>Best Sellers</span>
           </button>
         </div>

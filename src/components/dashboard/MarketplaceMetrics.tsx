@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDashboard } from '../../context/dashboardContext';
 import DateRangePicker from '../common/DateRangePicker';
 import {
@@ -19,8 +19,15 @@ interface MetricCardProps {
   icon: IconType;
 }
 
-  const MarketplaceMetrics: React.FC = () => {
+const MarketplaceMetrics: React.FC = () => {
   const { clicksData, dateRange, setDateRange, loading } = useDashboard();
+
+  // Initialize with empty dates to show all data
+  useEffect(() => {
+  if (dateRange == null) {
+    setDateRange({ startDate: '', endDate: '' });
+  }
+}, [dateRange, setDateRange]);
 
   const handleDateChange = (startDate: string, endDate: string) => {
     setDateRange({ startDate, endDate });
@@ -30,48 +37,54 @@ interface MetricCardProps {
     return <div className="flex justify-center items-center h-64">Loading...</div>;
   }
 
-  const monthToDate = (month: string): Date => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const monthIndex = months.indexOf(month);
-    const currentYear = new Date().getFullYear();
-    return new Date(currentYear, monthIndex, 1);
+  const filterDataByDateRange = () => {
+    if (!dateRange.startDate || !dateRange.endDate) {
+      return clicksData;
+    }
+
+    const start = new Date(dateRange.startDate);
+    const end = new Date(dateRange.endDate);
+
+    return clicksData.filter(item => {
+      const itemDate = new Date(item.date);
+      return itemDate >= start && itemDate <= end;
+    });
   };
 
-  const hasDateRange = !!dateRange.startDate && !!dateRange.endDate;
+  // show all data when dates are empty
+  const filteredData = !dateRange.startDate || !dateRange.endDate 
+    ? clicksData 
+    : filterDataByDateRange();
 
-  const filteredData = hasDateRange
-    ? clicksData.filter(item => {
-        const itemDate = monthToDate(item.month);
-        const startDate = new Date(dateRange.startDate);
-        const endDate = new Date(dateRange.endDate);
-        return itemDate >= startDate && itemDate <= endDate;
-      })
-    : clicksData;
+  // Calculate totals
+  const totals = filteredData.reduce(
+    (acc, item) => ({
+      clicks: acc.clicks + item.clicks,
+      dpv: acc.dpv + item.dpv,
+      atc: acc.atc + item.atc,
+      sales: acc.sales + item.sales,
+      commission: acc.commission + item.commission,
+      conversion: acc.conversion + item.conversion,
+    }),
+    { clicks: 0, dpv: 0, atc: 0, sales: 0, commission: 0, conversion: 0 }
+  );
 
-  const totals = filteredData.reduce((acc, data) => ({
-    clicks: acc.clicks + data.clicks,
-    dpv: acc.dpv + data.dpv,
-    atc: acc.atc + data.atc,
-    sales: acc.sales + data.sales,
-    commission: acc.commission + data.commission,
-    conversion: acc.conversion + data.conversion,
-  }), {
-    clicks: 0,
-    dpv: 0,
-    atc: 0,
-    sales: 0,
-    commission: 0,
-    conversion: 0,
-  });
-
-  const conversionRate = totals.clicks > 0
-    ? (totals.conversion / totals.clicks) * 100
+  // Calculate metrics
+  const conversionRate = totals.clicks > 0 
+    ? (totals.conversion / totals.clicks) * 100 
+    : 0;
+  const earningsPerClick = totals.clicks > 0 
+    ? totals.commission / totals.clicks 
     : 0;
 
-  const earningsPerClick = totals.clicks > 0
-    ? totals.commission / totals.clicks
-    : 0;
+  // Format currency
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    }).format(value);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mt-6">
@@ -84,29 +97,26 @@ interface MetricCardProps {
         />
       </div>
 
-      {filteredData.length === 0 ? (
-        <div className="flex justify-center items-center h-64 text-gray-500">
-          No data available{hasDateRange ? " for the selected date range" : ""}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <MetricCard label="Clicks" value={totals.clicks.toLocaleString()} icon={FaMousePointer} />
+        <MetricCard label="DPVs" value={totals.dpv.toLocaleString()} icon={FaEye} />
+        <MetricCard label="ATCs" value={totals.atc.toLocaleString()} icon={FaCartPlus} />
+        <MetricCard label="Conversions" value={totals.conversion.toLocaleString()} icon={FaCheckCircle} />
+        <MetricCard label="Sales" value={formatCurrency(totals.sales)} icon={FaDollarSign} />
+        <MetricCard label="Commission" value={formatCurrency(totals.commission)} icon={FaCoins} />
+        <MetricCard label="Conversion Rate" value={`${conversionRate.toFixed(2)}%`} icon={FaChartLine} />
+        <MetricCard label="EPC" value={formatCurrency(earningsPerClick)} icon={FaMoneyBillWave} />
+      </div>
+
+      {dateRange.startDate && dateRange.endDate ? (
+        <div className="text-sm text-gray-500">
+          Showing data from {new Date(dateRange.startDate).toLocaleDateString()} to{' '}
+          {new Date(dateRange.endDate).toLocaleDateString()}
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <MetricCard label="Clicks" value={totals.clicks.toLocaleString()} icon={FaMousePointer} />
-            <MetricCard label="Detail Page Views" value={totals.dpv.toLocaleString()} icon={FaEye}/>
-            <MetricCard label="Add to Carts" value={totals.atc.toLocaleString()} icon={FaCartPlus}/>
-            <MetricCard label="Conversions" value={totals.conversion.toLocaleString()} icon={FaCheckCircle}/>
-            <MetricCard label="Sales" value={totals.sales.toLocaleString()} icon={FaDollarSign}/>
-            <MetricCard label="Commission" value={totals.commission.toLocaleString()} icon={FaCoins} />
-            <MetricCard label="Conversion Rate" value={conversionRate.toFixed(2)} icon={FaChartLine}/>
-            <MetricCard label="Earnings Per Click" value={earningsPerClick.toFixed(2)} icon={FaMoneyBillWave}/>
-          </div>
-
-          {hasDateRange && (
-            <div className="text-sm text-gray-500 mb-4">
-              Showing data from {new Date(dateRange.startDate).toLocaleDateString()} to {new Date(dateRange.endDate).toLocaleDateString()}
-            </div>
-          )}
-        </>
+        <div className="text-sm text-gray-500">
+          Showing all available data ({clicksData.length} months)
+        </div>
       )}
     </div>
   );
@@ -114,7 +124,7 @@ interface MetricCardProps {
 
 const MetricCard: React.FC<MetricCardProps> = ({ label, value, icon: Icon }) => (
   <div className="px-4 py-2 rounded-lg border border-gray-300 text-gray-800 flex items-center">
-    <Icon className="text-gray-400 mr-3 text-lg" />
+    <Icon className="text-lime-400 mr-3 text-lg" />
     <div className="text-left">
       <div className="font-medium">{label}</div>
       <div className="text-sm">{value}</div>

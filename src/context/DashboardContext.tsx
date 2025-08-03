@@ -2,28 +2,36 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PartnershipData, MarketplaceMetric, ClicksData } from '../types/dashboard';
 import { fetchPartnerships, fetchMarketplaceMetrics, fetchClicksData } from '../services/dashboardApi';
 
+// Define types
+interface DateRange {
+  startDate: string;
+  endDate: string;
+}
+
 interface DashboardContextType {
   partnerships: PartnershipData | null;
   metrics: MarketplaceMetric[];
   clicksData: ClicksData[];
   loading: boolean;
   error: string | null;
-  dateRange: { startDate: string; endDate: string };
-  setDateRange: (range: { startDate: string; endDate: string }) => void;
+  dateRange: DateRange;
+  setDateRange: (range: DateRange) => void;
   fetchMetrics: () => Promise<void>;
 }
 
+// Create context
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
-export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// Provider component
+function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [partnerships, setPartnerships] = useState<PartnershipData | null>(null);
   const [metrics, setMetrics] = useState<MarketplaceMetric[]>([]);
   const [clicksData, setClicksData] = useState<ClicksData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState({
-    startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0],
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: '', // <- make this blank initially
+    endDate: '',
   });
 
   const fetchAllData = async () => {
@@ -84,12 +92,16 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       {children}
     </DashboardContext.Provider>
   );
-};
+}
 
-export const useDashboard = () => {
+// Export the hook as a stable named function
+function useDashboard(): DashboardContextType {
   const context = useContext(DashboardContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useDashboard must be used within a DashboardProvider');
   }
   return context;
-};
+}
+
+// ✅ Named exports only — no `export default`
+export { DashboardProvider, useDashboard };

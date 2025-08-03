@@ -15,6 +15,7 @@ export interface MarketplaceMetric {
 }
 
 export interface ClicksData {
+  date: string | number | Date;
   month: string;
   clicks: number;
   dpv: number;
