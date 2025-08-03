@@ -1,7 +1,10 @@
-<!-- Start the Frontend--
+<!-- Start the Frontend -->
+npm run dev
 
-npm run dev -->
+<!-- Start the Server -->
+npm run server
 
-<!-- Start the Server
-
-npm run server -->
+<!-- Test Project Jest -->
+npx jest ProductCard
+npx jest ClickChart
+npx jest MarketplaceMetrics
