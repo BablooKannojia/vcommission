@@ -47,7 +47,7 @@ const MarketplaceMetrics: React.FC = () => {
     ? totals.earningsPerClick / filteredMetrics.length 
     : 0;
 
-  // Calculate conversion count (assuming conversion rate is percentage of clicks)
+  // Calculate conversion count
   const conversions = (totals.clicks * avgConversionRate / 100).toFixed(0);
 
   return (
