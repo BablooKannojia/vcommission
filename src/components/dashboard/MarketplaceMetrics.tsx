@@ -1,10 +1,26 @@
-// MarketplaceMetrics.tsx
 import React from 'react';
-import { useDashboard } from '../../context/dashboardContext';
+import { useDashboard } from '../../context/DashboardContext';
 import DateRangePicker from '../common/DateRangePicker';
+import {
+  FaMousePointer,
+  FaEye,
+  FaCartPlus,
+  FaCheckCircle,
+  FaDollarSign,
+  FaCoins,
+  FaChartLine,
+  FaMoneyBillWave,
+} from 'react-icons/fa';
+import { IconType } from 'react-icons';
 
-const MarketplaceMetrics: React.FC = () => {
-  const { metrics, dateRange, setDateRange, loading } = useDashboard();
+interface MetricCardProps {
+  label: string;
+  value: string;
+  icon: IconType;
+}
+
+  const MarketplaceMetrics: React.FC = () => {
+  const { clicksData, dateRange, setDateRange, loading } = useDashboard();
 
   const handleDateChange = (startDate: string, endDate: string) => {
     setDateRange({ startDate, endDate });
@@ -14,111 +30,96 @@ const MarketplaceMetrics: React.FC = () => {
     return <div className="flex justify-center items-center h-64">Loading...</div>;
   }
 
-  // Filter metrics based on the selected date range
-  const filteredMetrics = metrics.filter(metric => {
-    const metricDate = new Date(metric.date);
-    const startDate = new Date(dateRange.startDate);
-    const endDate = new Date(dateRange.endDate);
-    return metricDate >= startDate && metricDate <= endDate;
-  });
+  const monthToDate = (month: string): Date => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthIndex = months.indexOf(month);
+    const currentYear = new Date().getFullYear();
+    return new Date(currentYear, monthIndex, 1);
+  };
 
-  // Calculate totals for the summary cards
-  const totals = filteredMetrics.reduce((acc, metric) => ({
-    clicks: acc.clicks + metric.clicks,
-    dpv: acc.dpv + metric.dpv,
-    atc: acc.atc + metric.atc,
-    salesCommission: acc.salesCommission + metric.salesCommission,
-    conversionRate: acc.conversionRate + metric.conversionRate,
-    earningsPerClick: acc.earningsPerClick + metric.earningsPerClick,
+  const hasDateRange = !!dateRange.startDate && !!dateRange.endDate;
+
+  const filteredData = hasDateRange
+    ? clicksData.filter(item => {
+        const itemDate = monthToDate(item.month);
+        const startDate = new Date(dateRange.startDate);
+        const endDate = new Date(dateRange.endDate);
+        return itemDate >= startDate && itemDate <= endDate;
+      })
+    : clicksData;
+
+  const totals = filteredData.reduce((acc, data) => ({
+    clicks: acc.clicks + data.clicks,
+    dpv: acc.dpv + data.dpv,
+    atc: acc.atc + data.atc,
+    sales: acc.sales + data.sales,
+    commission: acc.commission + data.commission,
+    conversion: acc.conversion + data.conversion,
   }), {
     clicks: 0,
     dpv: 0,
     atc: 0,
-    salesCommission: 0,
-    conversionRate: 0,
-    earningsPerClick: 0,
+    sales: 0,
+    commission: 0,
+    conversion: 0,
   });
 
-  // Calculate averages
-  const avgConversionRate = filteredMetrics.length > 0 
-    ? totals.conversionRate / filteredMetrics.length 
-    : 0;
-  const avgEarningsPerClick = filteredMetrics.length > 0 
-    ? totals.earningsPerClick / filteredMetrics.length 
+  const conversionRate = totals.clicks > 0
+    ? (totals.conversion / totals.clicks) * 100
     : 0;
 
-  // Calculate conversion count
-  const conversions = (totals.clicks * avgConversionRate / 100).toFixed(0);
+  const earningsPerClick = totals.clicks > 0
+    ? totals.commission / totals.clicks
+    : 0;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mt-6">
       <div className="lg:flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800 lg:mb-0 mb-2">Marketplace</h2>
+        <h2 className="text-xl font-bold text-gray-800 lg:mb-0 mb-2">Marketplace Metrics</h2>
         <DateRangePicker
-          startDate={dateRange.startDate}
-          endDate={dateRange.endDate}
+          startDate={dateRange.startDate || ''}
+          endDate={dateRange.endDate || ''}
           onDateChange={handleDateChange}
         />
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Clicks</div>
-            <div className="text-sm">{totals.clicks.toLocaleString()}</div>
-          </div>
+      {filteredData.length === 0 ? (
+        <div className="flex justify-center items-center h-64 text-gray-500">
+          No data available{hasDateRange ? " for the selected date range" : ""}
         </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Detail Page Views</div>
-            <div className="text-sm">{totals.dpv.toLocaleString()}</div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <MetricCard label="Clicks" value={totals.clicks.toLocaleString()} icon={FaMousePointer} />
+            <MetricCard label="Detail Page Views" value={totals.dpv.toLocaleString()} icon={FaEye}/>
+            <MetricCard label="Add to Carts" value={totals.atc.toLocaleString()} icon={FaCartPlus}/>
+            <MetricCard label="Conversions" value={totals.conversion.toLocaleString()} icon={FaCheckCircle}/>
+            <MetricCard label="Sales" value={totals.sales.toLocaleString()} icon={FaDollarSign}/>
+            <MetricCard label="Commission" value={totals.commission.toLocaleString()} icon={FaCoins} />
+            <MetricCard label="Conversion Rate" value={conversionRate.toFixed(2)} icon={FaChartLine}/>
+            <MetricCard label="Earnings Per Click" value={earningsPerClick.toFixed(2)} icon={FaMoneyBillWave}/>
           </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Add to Carts</div>
-            <div className="text-sm">{totals.atc.toLocaleString()}</div>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Conversions</div>
-            <div className="text-sm">{conversions}</div>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Sales</div>
-            <div className="text-sm">${totals.salesCommission.toLocaleString()}</div>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Commission</div>
-            <div className="text-sm">${(totals.salesCommission * 0.2).toLocaleString()}</div>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Conversion Rate</div>
-            <div className="text-sm">{avgConversionRate.toFixed(2)}%</div>
-          </div>
-        </div>
-        <div className={`px-4 py-2 rounded-lg border border-gray-300 text-gray-800`}>
-          <div className="text-left">
-            <div className="font-medium">Earnings Per Click</div>
-            <div className="text-sm">${avgEarningsPerClick.toFixed(2)}</div>
-          </div>
-        </div>
-      </div>
 
-      {/* Optional: Display date range info */}
-      <div className="text-sm text-gray-500 mb-4">
-        Showing data from {new Date(dateRange.startDate).toLocaleDateString()} to {new Date(dateRange.endDate).toLocaleDateString()}
-      </div>
+          {hasDateRange && (
+            <div className="text-sm text-gray-500 mb-4">
+              Showing data from {new Date(dateRange.startDate).toLocaleDateString()} to {new Date(dateRange.endDate).toLocaleDateString()}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
+
+const MetricCard: React.FC<MetricCardProps> = ({ label, value, icon: Icon }) => (
+  <div className="px-4 py-2 rounded-lg border border-gray-300 text-gray-800 flex items-center">
+    <Icon className="text-gray-400 mr-3 text-lg" />
+    <div className="text-left">
+      <div className="font-medium">{label}</div>
+      <div className="text-sm">{value}</div>
+    </div>
+  </div>
+);
 
 export default MarketplaceMetrics;

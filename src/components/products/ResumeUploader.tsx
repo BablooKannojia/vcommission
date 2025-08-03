@@ -32,7 +32,7 @@ const ResumeUploader: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 mb-4">
+    <div className="bg-white rounded-lg shadow p-6 mt-4">
       <h2 className="text-xl font-bold mb-4">Resume Upload</h2>
       
       <div className="flex flex-col items-center mb-4">

@@ -1,4 +1,4 @@
-<!-- start the frontend--
+<!-- Start the Frontend--
 
 npm run dev -->
 
