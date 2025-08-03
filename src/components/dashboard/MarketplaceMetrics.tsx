@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDashboard } from '../../context/DashboardContext';
+import { useDashboard } from '../../context/dashboardContext';
 import DateRangePicker from '../common/DateRangePicker';
 import {
   FaMousePointer,

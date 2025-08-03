@@ -127,6 +127,42 @@
       "conversion": 7000,
       "sales": 28000,
       "commission": 5600
+    },
+    {
+      "month": "Sep",
+      "clicks": 2900,
+      "dpv": 2500,
+      "atc": 1800,
+      "conversion": 7300,
+      "sales": 29400,
+      "commission": 5200
+    },
+    {
+      "month": "Oct",
+      "clicks": 2800,
+      "dpv": 2200,
+      "atc": 1900,
+      "conversion": 8000,
+      "sales": 30000,
+      "commission": 6500
+    },
+    {
+      "month": "Nov",
+      "clicks": 2300,
+      "dpv": 2300,
+      "atc": 1100,
+      "conversion": 6000,
+      "sales": 29000,
+      "commission": 5300
+    },
+    {
+      "month": "Dec",
+      "clicks": 2300,
+      "dpv": 2400,
+      "atc": 1200,
+      "conversion": 5000,
+      "sales": 26000,
+      "commission": 5200
     }
   ],
   "products": [

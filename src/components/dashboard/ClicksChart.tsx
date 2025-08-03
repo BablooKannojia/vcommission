@@ -36,36 +36,91 @@ const ClicksChart: React.FC = () => {
   }
 
   // Common data configuration
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = clicksData.map((item) => item.month);
   
-  // Bar Chart Data (for Clicks)
-  const getBarChartData = () => {
-    return {
-      labels: months,
-      datasets: [
-        {
-          label: 'Clicks',
-          data: clicksData.map((item) => item.clicks),
-          backgroundColor: '#3B82F6',
-          borderRadius: 4,
-        },
-      ],
+  // Get data for the current active tab
+  const getChartData = () => {
+    const datasetConfig = {
+      backgroundColor: '#88a831',
+      borderColor: '#8db12aff',
+      borderRadius: 4,
+      tension: 0.1,
+      fill: false,
     };
-  };
 
-  // Line Chart Data (for DPVs)
-  const getLineChartData = () => {
-    return {
-      labels: months,
-      datasets: [
-        {
-          label: 'DPVs',
-          data: clicksData.map((item) => item.clicks),
-          backgroundColor: '#3B82F6',
-          borderRadius: 4,
-        },
-      ],
-    };
+    switch (activeTab) {
+      case 'clicks':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'Clicks',
+              data: clicksData.map((item) => item.clicks),
+            },
+          ],
+        };
+      case 'dpv':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'DPVs',
+              data: clicksData.map((item) => item.dpv),
+            },
+          ],
+        };
+      case 'atc':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'ATCs',
+              data: clicksData.map((item) => item.atc),
+            },
+          ],
+        };
+      case 'conversions':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'Conversions',
+              data: clicksData.map((item) => item.conversion),
+            },
+          ],
+        };
+      case 'sales':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'Sales',
+              data: clicksData.map((item) => item.sales),
+            },
+          ],
+        };
+      case 'commission':
+        return {
+          labels: months,
+          datasets: [
+            {
+              ...datasetConfig,
+              label: 'Commission',
+              data: clicksData.map((item) => item.commission),
+            },
+          ],
+        };
+      default:
+        return {
+          labels: months,
+          datasets: [],
+        };
+    }
   };
 
   // Bar Chart Options
@@ -86,8 +141,8 @@ const ClicksChart: React.FC = () => {
         ticks: {
           callback: function(value) {
             if (typeof value === 'number') {
-              if (value >= 1000) return `S${value / 1000}k`;
-              return `S${value}`;
+              if (value >= 1000) return `$${value / 1000}k`;
+              return `$${value}`;
             }
             return value;
           },
@@ -109,6 +164,26 @@ const ClicksChart: React.FC = () => {
         enabled: true,
         mode: 'index',
         intersect: false,
+        callbacks: {
+          label: function(context) {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.y !== null) {
+              if (['sales', 'commission', 'conversion'].includes(activeTab)) {
+                label += new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0
+                }).format(context.parsed.y);
+              } else {
+                label += context.parsed.y;
+              }
+            }
+            return label;
+          }
+        }
       },
     },
   };
@@ -128,6 +203,15 @@ const ClicksChart: React.FC = () => {
       },
       y: {
         beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            if (typeof value === 'number') {
+              if (value >= 1000) return `$${value / 1000}k`;
+              return `$${value}`;
+            }
+            return value;
+          },
+        },
         grid: {
           drawTicks: false,
           color: '#E5E7EB',
@@ -147,6 +231,31 @@ const ClicksChart: React.FC = () => {
           usePointStyle: true,
         },
       },
+      tooltip: {
+        enabled: true,
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function(context) {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.y !== null) {
+              if (['sales', 'commission', 'conversion'].includes(activeTab)) {
+                label += new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0
+                }).format(context.parsed.y);
+              } else {
+                label += context.parsed.y;
+              }
+            }
+            return label;
+          }
+        }
+      },
     },
   };
 
@@ -159,10 +268,15 @@ const ClicksChart: React.FC = () => {
     { id: 'commission', label: 'Commission' },
   ];
 
+  // Determine which chart type to use for each tab
+  const shouldUseLineChart = ['dpv', 'atc', 'conversions', 'sales', 'commission'].includes(activeTab);
+
   return (
     <div className="bg-white rounded-lg shadow p-6 mt-3">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Clicks</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          {tabs.find(tab => tab.id === activeTab)?.label || 'Clicks'}
+        </h2>
       </div>
 
       <div className="relative mb-4 md:mb-6">
@@ -171,10 +285,11 @@ const ClicksChart: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-shrink-0 px-4 py-2 text-sm font-medium whitespace-nowrap ${activeTab === tab.id
+              className={`flex-shrink-0 px-4 py-2 text-sm font-medium whitespace-nowrap ${
+                activeTab === tab.id
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-500 hover:text-gray-700'
-                }`}
+              }`}
             >
               {tab.label}
             </button>
@@ -185,12 +300,10 @@ const ClicksChart: React.FC = () => {
       </div>
 
       <div className="h-64 md:h-80">
-        {activeTab === 'clicks' ? (
-          <Bar data={getBarChartData()} options={barChartOptions} />
-        ) : activeTab === 'dpv' ? (
-          <Line data={getLineChartData()} options={lineChartOptions} />
+        {shouldUseLineChart ? (
+          <Line data={getChartData()} options={lineChartOptions} />
         ) : (
-          <Bar data={getBarChartData()} options={barChartOptions} />
+          <Bar data={getChartData()} options={barChartOptions} />
         )}
       </div>
 
@@ -198,9 +311,6 @@ const ClicksChart: React.FC = () => {
         <p>
           NOTE: A link will only start reporting at 10 total clicks. Clicks may take up to 24 hours to appear, conversions may take up to 48 hours to appear.
         </p>
-        {/* <a href="#" className="text-blue-600 text-sm hover:underline">
-          See All Reporting →
-        </a> */}
       </div>
     </div>
   );
