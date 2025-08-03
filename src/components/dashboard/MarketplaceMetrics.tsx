@@ -22,7 +22,6 @@ interface MetricCardProps {
 const MarketplaceMetrics: React.FC = () => {
   const { clicksData, dateRange, setDateRange, loading } = useDashboard();
 
-  // Initialize with empty dates to show all data
   useEffect(() => {
   if (dateRange == null) {
     setDateRange({ startDate: '', endDate: '' });

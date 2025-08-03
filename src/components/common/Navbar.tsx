@@ -1,4 +1,3 @@
-// Navbar.tsx
 import React from 'react';
 import Avatar from '../../assets/images/avatar.png';
 

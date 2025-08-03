@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PartnershipData, MarketplaceMetric, ClicksData } from '../types/dashboard';
 import { fetchPartnerships, fetchMarketplaceMetrics, fetchClicksData } from '../services/dashboardApi';
 
-// Define types
 interface DateRange {
   startDate: string;
   endDate: string;
@@ -19,10 +18,8 @@ interface DashboardContextType {
   fetchMetrics: () => Promise<void>;
 }
 
-// Create context
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
-// Provider component
 function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [partnerships, setPartnerships] = useState<PartnershipData | null>(null);
   const [metrics, setMetrics] = useState<MarketplaceMetric[]>([]);
@@ -30,7 +27,7 @@ function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: '', // <- make this blank initially
+    startDate: '',
     endDate: '',
   });
 
@@ -94,7 +91,6 @@ function DashboardProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Export the hook as a stable named function
 function useDashboard(): DashboardContextType {
   const context = useContext(DashboardContext);
   if (!context) {
@@ -103,5 +99,4 @@ function useDashboard(): DashboardContextType {
   return context;
 }
 
-// ✅ Named exports only — no `export default`
 export { DashboardProvider, useDashboard };

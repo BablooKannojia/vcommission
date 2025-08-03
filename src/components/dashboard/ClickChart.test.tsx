@@ -4,7 +4,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ClicksChart from './ClicksChart';
 import { useDashboard } from '../../context/dashboardContext';
 
-// Mock chart.js canvas since JSDOM doesn't support <canvas>
 jest.mock('react-chartjs-2', () => ({
   Line: ({ data }: any) => <div data-testid="line-chart">{JSON.stringify(data)}</div>,
   Bar: ({ data }: any) => <div data-testid="bar-chart">{JSON.stringify(data)}</div>,

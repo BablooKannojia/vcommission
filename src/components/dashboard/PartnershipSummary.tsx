@@ -1,4 +1,3 @@
-// PartnershipSummary.tsx
 import React from 'react';
 import { useDashboard } from '../../context/dashboardContext';
 
