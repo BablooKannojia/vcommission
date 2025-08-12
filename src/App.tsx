@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { DashboardProvider } from './context/dashboardContext';
+import { DashboardProvider } from './context/DashboardContext';
 import { ProductsProvider } from './context/ProductsContext';
 import Layout from './components/common/Layout';
 import LoadingSpinner from './components/common/LoadingSpinner';
