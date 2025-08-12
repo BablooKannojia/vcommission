@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDashboard } from '../../context/dashboardContext';
+import { useDashboard } from '../../context/DashboardContext';
 
 const PartnershipSummary: React.FC = () => {
   const { partnerships, loading } = useDashboard();
