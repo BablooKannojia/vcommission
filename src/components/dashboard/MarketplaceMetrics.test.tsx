@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MarketplaceMetrics from './MarketplaceMetrics';
-import { useDashboard } from '../../context/dashboardContext';
+import { useDashboard } from '../../context/DashboardContext';
 
 jest.mock('../../context/dashboardContext');
 jest.mock('../common/DateRangePicker', () => ({
