@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ClicksChart from './ClicksChart';
-import { useDashboard } from '../../context/dashboardContext';
+import { useDashboard } from '../../context/DashboardContext';
 
 jest.mock('react-chartjs-2', () => ({
   Line: ({ data }: any) => <div data-testid="line-chart">{JSON.stringify(data)}</div>,
@@ -10,7 +10,7 @@ jest.mock('react-chartjs-2', () => ({
 }));
 
 // Mock dashboard context
-jest.mock('../../context/dashboardContext', () => ({
+jest.mock('../../context/DashboardContext', () => ({
   useDashboard: jest.fn(),
 }));
 
