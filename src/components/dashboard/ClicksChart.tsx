@@ -12,7 +12,7 @@ import {
   Legend,
   ChartOptions,
 } from 'chart.js';
-import { useDashboard } from '../../context/dashboardContext';
+import { useDashboard } from '../../context/DashboardContext';
 
 ChartJS.register(
   CategoryScale,
